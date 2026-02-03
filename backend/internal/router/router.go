@@ -42,10 +42,16 @@ func SetupRouter() *fiber.App {
 	}))
 
 	// CORS
+	origins := config.AppConfig.FrontendURL
+	if config.AppConfig.Environment == "development" {
+		// In development, allow both localhost and 127.0.0.1
+		origins += ", http://localhost:3000, http://127.0.0.1:3000"
+	}
+
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     config.AppConfig.FrontendURL,
+		AllowOrigins:     origins,
 		AllowMethods:     "GET,POST,PUT,DELETE,OPTIONS",
-		AllowHeaders:     "Origin,Content-Type,Accept,Authorization",
+		AllowHeaders:     "Origin,Content-Type,Accept,Authorization,X-Requested-With",
 		AllowCredentials: true,
 	}))
 

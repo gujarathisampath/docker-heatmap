@@ -122,8 +122,8 @@ func PublicRateLimitMiddleware() fiber.Handler {
 // EnforceJSONMiddleware ensures that the client accepts JSON responses
 func EnforceJSONMiddleware() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		// Only check for non-GET requests or specific API routes
-		if c.Method() == fiber.MethodGet {
+		// Only check for non-GET/OPTIONS requests
+		if c.Method() == fiber.MethodGet || c.Method() == fiber.MethodOptions {
 			return c.Next()
 		}
 
