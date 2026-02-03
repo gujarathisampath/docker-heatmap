@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   # Backend API (GoFiber)
   backend:
+    image: sagargujarathi/docker-heatmap-backend:latest
     container_name: docker-heatmap-backend
     restart: unless-stopped
     env_file:
