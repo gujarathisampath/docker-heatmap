@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"regexp"
 	"time"
 
 	"docker-heatmap/internal/middleware"
@@ -9,6 +10,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 )
+
+// Docker username validation: 4-30 chars, alphanumeric with allowed special chars
+var dockerUsernameRegex = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9._-]{2,29}$`)
 
 type DockerHandler struct {
 	dockerService *services.DockerHubService
@@ -44,6 +48,20 @@ func (h *DockerHandler) ConnectDocker(c *fiber.Ctx) error {
 	if req.DockerUsername == "" || req.AccessToken == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Docker username and access token are required",
+		})
+	}
+
+	// Security: Validate username format
+	if !dockerUsernameRegex.MatchString(req.DockerUsername) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid Docker username format",
+		})
+	}
+
+	// Security: Validate token length (Docker PATs are typically 36+ chars)
+	if len(req.AccessToken) < 10 || len(req.AccessToken) > 500 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid access token length",
 		})
 	}
 

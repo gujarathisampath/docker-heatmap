@@ -21,12 +21,12 @@ type ActivityEvent struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Foreign Key
-	DockerAccountID uint          `gorm:"column:docker_account_id;not null;index" json:"docker_account_id"`
+	DockerAccountID uint          `gorm:"column:docker_account_id;not null;index:idx_activity_account_date" json:"docker_account_id"`
 	DockerAccount   DockerAccount `gorm:"foreignKey:DockerAccountID" json:"-"`
 
 	// Event Data
 	EventType EventType `gorm:"column:event_type;not null;index" json:"event_type"`
-	EventDate time.Time `gorm:"column:event_date;not null;index" json:"event_date"`
+	EventDate time.Time `gorm:"column:event_date;not null;index:idx_activity_account_date" json:"event_date"`
 	Count     int       `gorm:"column:count;not null;default:1" json:"count"`
 
 	// Repository Info

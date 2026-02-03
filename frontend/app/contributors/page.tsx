@@ -54,6 +54,7 @@ export default async function ContributorsPage() {
               <Link
                 href={contributor.html_url}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="block p-6 text-center space-y-4"
               >
                 <div className="relative w-20 h-20 mx-auto">
@@ -95,6 +96,7 @@ export default async function ContributorsPage() {
           <Link
             href="https://github.com/sagargujarathi/docker-heatmap"
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 mt-4 text-primary hover:underline"
           >
             Visit GitHub Repository <ExternalLink className="w-4 h-4" />

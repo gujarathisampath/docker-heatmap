@@ -14,6 +14,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dockerheatmap.dev"),
   title: {
     default: "Docker Heatmap | Visualize Your Container Activity",
     template: "%s | Docker Heatmap",
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://docker-heatmap.vercel.app",
+    url: "https://dockerheatmap.dev",
     siteName: "Docker Heatmap",
     title: "Docker Heatmap",
     description: "Visualize your Docker Hub activity like GitHub commits.",

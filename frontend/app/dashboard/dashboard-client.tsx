@@ -239,14 +239,16 @@ export function DashboardClient() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="rounded-xl border bg-muted/20 p-8 flex justify-center items-center h-full min-h-[300px]">
-                      {/* Using a regular img tag for the dynamic SVG since Next/Image has issues with dynamic external SVGs and size optimization for small assets */}
-                      <img
-                        key={JSON.stringify(svgOptions)}
-                        src={getCustomSvgUrl()}
-                        alt="Your Docker activity heatmap"
-                        className="w-full h-auto max-w-full shadow-sm rounded bg-background"
-                      />
+                    <div className="rounded-xl border bg-muted/20 p-4 sm:p-8 overflow-x-auto">
+                      <div className="min-w-[320px] flex justify-center items-center">
+                        {/* Using a regular img tag for the dynamic SVG since Next/Image has issues with dynamic external SVGs and size optimization for small assets */}
+                        <img
+                          key={JSON.stringify(svgOptions)}
+                          src={getCustomSvgUrl()}
+                          alt="Your Docker activity heatmap"
+                          className="w-full h-auto max-w-full shadow-sm rounded bg-background"
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

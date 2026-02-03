@@ -20,6 +20,7 @@ export function SiteFooter() {
           <Link
             href="https://github.com/sagargujarathi/docker-heatmap"
             target="_blank"
+            rel="noopener noreferrer"
             className="hover:text-foreground transition-colors"
           >
             GitHub

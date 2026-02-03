@@ -160,14 +160,14 @@ openssl rand -base64 24 | head -c 32
 ### Markdown (GitHub README)
 
 ```markdown
-![Docker Activity](https://your-domain.com/api/heatmap/your-docker-username.svg)
+![Docker Activity](https://dockerheatmap.dev/api/heatmap/your-docker-username.svg)
 ```
 
 ### HTML
 
 ```html
 <img
-  src="https://your-domain.com/api/heatmap/your-docker-username.svg"
+  src="https://dockerheatmap.dev/api/heatmap/your-docker-username.svg"
   alt="Docker Activity"
 />
 ```
@@ -175,9 +175,9 @@ openssl rand -base64 24 | head -c 32
 ### With Link
 
 ```html
-<a href="https://your-domain.com/profile/your-docker-username">
+<a href="https://dockerheatmap.dev/profile/your-docker-username">
   <img
-    src="https://your-domain.com/api/heatmap/your-docker-username.svg"
+    src="https://dockerheatmap.dev/api/heatmap/your-docker-username.svg"
     alt="Docker Activity"
   />
 </a>
@@ -212,28 +212,37 @@ docker-compose up --build
 
 ### VPS with Docker
 
-1. Set production environment variables
-2. Configure Nginx with SSL
-3. Run Docker Compose with production profile
-
-```bash
-docker-compose --profile production up -d
-```
+1. Create and configure `infra/.env.server`:
+   ```bash
+   cp .env.example infra/.env.server
+   # Edit infra/.env.server with production values
+   ```
+2. Run Docker Compose:
+   ```bash
+   cd infra
+   docker-compose up -d --build
+   ```
 
 ### Environment for Production
 
 ```env
 ENVIRONMENT=production
-FRONTEND_URL=https://your-domain.com
-GITHUB_CALLBACK_URL=https://your-domain.com/api/auth/github/callback
+FRONTEND_URL=https://dockerheatmap.dev
+GITHUB_CALLBACK_URL=https://dockerheatmap.dev/api/auth/github/callback
 ```
 
 ## 🔐 Security
 
 - **Token Encryption:** Docker Hub tokens are encrypted with AES-256-GCM
 - **OAuth State:** CSRF protection with state tokens
-- **Rate Limiting:** Different tiers for API, auth, and public endpoints
+- **Rate Limiting:** Different tiers for API, auth, and public endpoints with memory protection
 - **JWT Auth:** Stateless authentication with 7-day expiry
+- **Security Headers:** X-Content-Type-Options, X-Frame-Options, HSTS, Referrer-Policy
+- **Input Validation:** Username format validation and token length checks
+- **XSS Prevention:** SVG output is sanitized to prevent script injection
+- **Non-root Docker:** Container runs as unprivileged user
+- **Production Guards:** App fails to start with default secrets in production
+- **Request Limits:** Body size limited to 1MB to prevent DoS
 
 ## 📄 License
 

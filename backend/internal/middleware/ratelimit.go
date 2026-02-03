@@ -12,6 +12,7 @@ type RateLimiter struct {
 	mu       sync.RWMutex
 	limit    int
 	window   time.Duration
+	maxKeys  int // Maximum number of keys to prevent memory exhaustion
 }
 
 func NewRateLimiter(limit int, window time.Duration) *RateLimiter {
@@ -19,6 +20,7 @@ func NewRateLimiter(limit int, window time.Duration) *RateLimiter {
 		requests: make(map[string][]time.Time),
 		limit:    limit,
 		window:   window,
+		maxKeys:  100000, // Limit to 100k unique IPs to prevent memory attacks
 	}
 
 	// Cleanup old entries every minute
@@ -58,6 +60,11 @@ func (rl *RateLimiter) Allow(key string) bool {
 
 	now := time.Now()
 	times := rl.requests[key]
+
+	// If this is a new key and we're at capacity, deny the request
+	if times == nil && len(rl.requests) >= rl.maxKeys {
+		return false
+	}
 
 	// Filter old requests in-place to avoid allocation
 	validCount := 0

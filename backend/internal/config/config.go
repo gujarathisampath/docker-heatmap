@@ -71,6 +71,19 @@ func Load() {
 	if AppConfig.GitHubClientID == "" || AppConfig.GitHubClientSecret == "" {
 		log.Println("Warning: GitHub OAuth credentials not configured")
 	}
+
+	// Security: Validate critical secrets in production
+	if AppConfig.Environment == "production" {
+		if AppConfig.JWTSecret == "your-super-secret-jwt-key-change-in-production" {
+			log.Fatal("FATAL: JWT_SECRET must be changed in production!")
+		}
+		if AppConfig.EncryptionKey == "a-32-byte-encryption-key-here!!" {
+			log.Fatal("FATAL: ENCRYPTION_KEY must be changed in production!")
+		}
+		if len(AppConfig.EncryptionKey) != 32 {
+			log.Fatalf("FATAL: ENCRYPTION_KEY must be exactly 32 bytes, got %d", len(AppConfig.EncryptionKey))
+		}
+	}
 }
 
 func getEnv(key, defaultValue string) string {

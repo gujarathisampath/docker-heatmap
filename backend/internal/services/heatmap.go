@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"fmt"
+	"html"
 	"html/template"
 	"strings"
 	"time"
@@ -207,7 +208,7 @@ type DayLabel struct {
 	Label string
 }
 
-const svgTemplate = `<svg width="{{.Width}}" height="{{.Height}}" viewBox="0 0 {{.Width}} {{.Height}}" xmlns="http://www.w3.org/2000/svg">
+const svgTemplate = `<svg width="100%" height="auto" viewBox="0 0 {{.Width}} {{.Height}}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
   <style>
     .day { shape-rendering: geometricPrecision; outline: 1px solid rgba(27, 31, 35, 0.06); outline-offset: -1px; }
     .month-label { font-size: {{.Config.FontSize}}px; fill: {{.Config.TextColor}}; font-family: {{.Config.FontFamily}}; }
@@ -425,6 +426,10 @@ func (s *HeatmapService) GenerateSVGWithOptions(dockerUsername string, opts SVGO
 	legendY := topMargin + cellsHeight + 5
 	legendX := width - 120
 
+	// Security: Escape user-provided content to prevent XSS in SVG
+	safeUsername := html.EscapeString(dockerUsername)
+	safeCustomTitle := html.EscapeString(opts.CustomTitle)
+
 	data := SVGData{
 		Width:        width,
 		Height:       height,
@@ -432,12 +437,12 @@ func (s *HeatmapService) GenerateSVGWithOptions(dockerUsername string, opts SVGO
 		MonthLabels:  monthLabels,
 		DayLabels:    dayLabels,
 		Config:       config,
-		Username:     dockerUsername,
+		Username:     safeUsername,
 		TotalCount:   totalCount,
 		HideLegend:   opts.HideLegend,
 		HideTotal:    opts.HideTotal,
 		HideLabels:   opts.HideLabels,
-		CustomTitle:  opts.CustomTitle,
+		CustomTitle:  safeCustomTitle,
 		LegendX:      legendX,
 		LegendY:      legendY,
 		FooterY:      footerY,

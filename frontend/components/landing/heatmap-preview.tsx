@@ -18,38 +18,41 @@ export function HeatmapPreview() {
 
   return (
     <div className="relative">
-      <div className="relative flex flex-col gap-[4px] p-6 bg-card rounded-xl border shadow-sm items-center">
-        <div className="flex flex-col gap-[4px] max-w-full pb-2">
-          {[0, 1, 2, 3, 4, 5, 6].map((row) => (
-            <div key={row} className="flex gap-[4px]">
-              {Array.from({ length: 50 }).map((_, col) => {
-                const level = getLevel(row, col);
-                return (
-                  <div
-                    key={col}
-                    className={`w-[11px] h-[11px] sm:w-[12px] sm:h-[12px] rounded-[2px] ${colors[level]} transition-colors hover:ring-2 hover:ring-primary/30 cursor-default`}
-                  />
-                );
-              })}
-            </div>
-          ))}
+      <div className="relative flex flex-col gap-[4px] p-4 sm:p-6 bg-card rounded-xl border shadow-sm items-center overflow-x-auto">
+        {/* Scrollable heatmap grid */}
+        <div className="overflow-x-auto w-full pb-2">
+          <div className="flex flex-col gap-[4px] min-w-[600px] mx-auto">
+            {[0, 1, 2, 3, 4, 5, 6].map((row) => (
+              <div key={row} className="flex gap-[4px] justify-center">
+                {Array.from({ length: 50 }).map((_, col) => {
+                  const level = getLevel(row, col);
+                  return (
+                    <div
+                      key={col}
+                      className={`w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-[2px] ${colors[level]} transition-colors hover:ring-2 hover:ring-primary/30 cursor-default flex-shrink-0`}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex items-center justify-between w-full mt-6 text-[11px] text-muted-foreground px-2 uppercase tracking-widest font-semibold flex-wrap gap-4">
-          <div className="flex gap-4 sm:gap-6">
+        <div className="flex items-center justify-between w-full mt-4 sm:mt-6 text-[10px] sm:text-[11px] text-muted-foreground px-2 uppercase tracking-widest font-semibold flex-wrap gap-3 sm:gap-4">
+          <div className="flex gap-3 sm:gap-6">
             <span>Jan</span>
             <span>Mar</span>
             <span>May</span>
-            <span>Jul</span>
-            <span>Sep</span>
+            <span className="hidden sm:inline">Jul</span>
+            <span className="hidden sm:inline">Sep</span>
             <span>Nov</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <span>Less</span>
             {colors.map((color, i) => (
               <div
                 key={i}
-                className={`w-[11px] h-[11px] rounded-[1px] ${color}`}
+                className={`w-[9px] h-[9px] sm:w-[11px] sm:h-[11px] rounded-[1px] ${color}`}
               />
             ))}
             <span>More</span>

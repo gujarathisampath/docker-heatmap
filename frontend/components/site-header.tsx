@@ -37,6 +37,7 @@ export function SiteHeader() {
           <Link
             href="https://github.com/sagargujarathi/docker-heatmap"
             target="_blank"
+            rel="noopener noreferrer"
             className="text-sm text-muted-foreground hover:text-foreground px-3 py-2 hidden md:block"
           >
             GitHub

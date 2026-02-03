@@ -25,6 +25,9 @@ var (
 	ErrInvalidDockerToken    = errors.New("invalid docker hub access token")
 )
 
+// Use shared HTTP client from utils package
+var httpClient = utils.HTTPClient
+
 // parseDockerTime parses Docker Hub's date format which includes microseconds
 func parseDockerTime(dateStr string) (time.Time, error) {
 	// Docker Hub uses ISO 8601 format with microseconds: 2026-01-17T08:19:30.340959Z
@@ -160,8 +163,7 @@ func (s *DockerHubService) validateUsername(ctx context.Context, username string
 	}
 	req.Header.Set("Accept", "application/json")
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Printf("Docker Hub API request failed: %v", err)
 		return ErrDockerHubAuthFailed
@@ -212,7 +214,7 @@ func (s *DockerHubService) FetchRepositories(ctx context.Context, username, toke
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
 
-	client := &http.Client{Timeout: 30 * time.Second}
+	client := httpClient
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch repositories: %w", err)
@@ -250,8 +252,7 @@ func (s *DockerHubService) FetchTags(ctx context.Context, username, repoName, to
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
 
-	client := &http.Client{Timeout: 30 * time.Second}
-	resp, err := client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

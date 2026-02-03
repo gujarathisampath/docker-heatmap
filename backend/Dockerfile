@@ -23,8 +23,15 @@ WORKDIR /app
 # Install CA certificates for HTTPS calls
 RUN apk --no-cache add ca-certificates tzdata
 
+# Security: Create non-root user
+RUN addgroup -g 1001 appgroup && \
+    adduser -u 1001 -G appgroup -s /bin/sh -D appuser
+
 # Copy binary from builder
-COPY --from=builder /app/main .
+COPY --from=builder --chown=appuser:appgroup /app/main .
+
+# Switch to non-root user
+USER appuser
 
 # Expose port
 EXPOSE 8080
