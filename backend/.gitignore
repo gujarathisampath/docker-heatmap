@@ -1,3 +1,4 @@
 cmd.exe
 .env
 main.exe
+go.sum
